@@ -40,7 +40,6 @@ public interface AccountRepository extends CrudRepository<Account, Integer> {
     @Override
     Iterable<Account> findAll();
 
-
     @Cacheable(key = "#username")
     Account findByUsername(String username);
 
@@ -63,12 +62,14 @@ public interface AccountRepository extends CrudRepository<Account, Integer> {
 
     // 覆盖以下父类中需要处理缓存失效的方法
     // 父类取不到CacheConfig的配置信息，所以不能抽象成一个通用的父类接口中完成
+    @Override
     @Caching(evict = {
             @CacheEvict(key = "#entity.id"),
             @CacheEvict(key = "#entity.username")
     })
     <S extends Account> S save(S entity);
 
+    @Override
     @CacheEvict
     <S extends Account> Iterable<S> saveAll(Iterable<S> entities);
 
@@ -81,12 +82,15 @@ public interface AccountRepository extends CrudRepository<Account, Integer> {
     @CacheEvict(key = "#id")
     void deleteById(ID id);
 
+    @Override
     @CacheEvict(key = "#entity.id")
     void delete(Account entity);
 
+    @Override
     @CacheEvict(allEntries = true)
     void deleteAll(Iterable<? extends Account> entities);
 
+    @Override
     @CacheEvict(allEntries = true)
     void deleteAll();
 }
