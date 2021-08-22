@@ -1,5 +1,8 @@
 database: hsqldb
 
+server:
+  port: 8082
+
 spring:
   datasource:
     schema: "classpath:db/${database}/schema.sql"
